@@ -101,12 +101,12 @@ public class ImageDft {
         }
 
         /* Vertical */
-        for (int i = 0; i < this.Width; i++) { // For each row
-            for (int k = 0; k < this.Height; k++) {  // For each element in the row
+        for (int i = 0; i < this.Width; i++) { // For each column
+            for (int k = 0; k < this.Height; k++) {  // For each element in the column
                 sumReal[R] = sumReal[G] = sumReal[B] = 0;
                 sumImag[R] = sumImag[G] = sumImag[B] = 0;
 
-                for (int t = 0; t < this.Height; t++) {  // For each element in the row
+                for (int t = 0; t < this.Height; t++) {  // For each element in the column
                     double angle = 2 * Math.PI * t * k / this.Height;
 
                     sumReal[R] +=  tmpReal[t][i][R] * Math.cos(angle) + tmpImag[t][i][R] * Math.sin(angle);
