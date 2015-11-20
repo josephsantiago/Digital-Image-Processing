@@ -109,21 +109,21 @@ public class ImageDft {
                 for (int t = 0; t < this.Height; t++) {  // For each element in the row
                     double angle = 2 * Math.PI * t * k / this.Height;
 
-                    sumReal[R] +=  tmpReal[i][t][R] * Math.cos(angle) + tmpImag[i][t][R] * Math.sin(angle);
-                    sumImag[R] += -tmpReal[i][t][R] * Math.sin(angle) + tmpImag[i][t][R] * Math.cos(angle);
+                    sumReal[R] +=  tmpReal[t][i][R] * Math.cos(angle) + tmpImag[t][i][R] * Math.sin(angle);
+                    sumImag[R] += -tmpReal[t][i][R] * Math.sin(angle) + tmpImag[t][i][R] * Math.cos(angle);
 
-                    sumReal[G] +=  tmpReal[i][t][G] * Math.cos(angle) + tmpImag[i][t][G] * Math.sin(angle);
-                    sumImag[G] += -tmpReal[i][t][G] * Math.sin(angle) + tmpImag[i][t][G] * Math.cos(angle);
+                    sumReal[G] +=  tmpReal[t][i][G] * Math.cos(angle) + tmpImag[t][i][G] * Math.sin(angle);
+                    sumImag[G] += -tmpReal[t][i][G] * Math.sin(angle) + tmpImag[t][i][G] * Math.cos(angle);
 
-                    sumReal[B] +=  tmpReal[i][t][B] * Math.cos(angle) + tmpImag[i][t][B] * Math.sin(angle);
-                    sumImag[B] += -tmpReal[i][t][B] * Math.sin(angle) + tmpImag[i][t][B] * Math.cos(angle);
+                    sumReal[B] +=  tmpReal[t][i][B] * Math.cos(angle) + tmpImag[t][i][B] * Math.sin(angle);
+                    sumImag[B] += -tmpReal[t][i][B] * Math.sin(angle) + tmpImag[t][i][B] * Math.cos(angle);
                 }
-                this.Real[i][k][R] = sumReal[R];
-                this.Imag[i][k][R] = sumImag[R];
-                this.Real[i][k][G] = sumReal[G];
-                this.Imag[i][k][G] = sumImag[G];
-                this.Real[i][k][B] = sumReal[B];
-                this.Imag[i][k][B] = sumImag[B];
+                this.Real[k][i][R] = sumReal[R];
+                this.Imag[k][i][R] = sumImag[R];
+                this.Real[k][i][G] = sumReal[G];
+                this.Imag[k][i][G] = sumImag[G];
+                this.Real[k][i][B] = sumReal[B];
+                this.Imag[k][i][B] = sumImag[B];
             }
         }
 
