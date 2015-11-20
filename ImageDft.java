@@ -2,15 +2,8 @@
  * Discrete Fourier transform
  * Base: http://www.nayuki.io/page/how-to-implement-the-discrete-fourier-transform
  */
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-import java.util.StringTokenizer;
-import javax.imageio.*;
-import javax.imageio.stream.*;
 
 public class ImageDft {
 
