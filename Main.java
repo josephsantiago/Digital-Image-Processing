@@ -44,6 +44,11 @@ public class Main {
 
         Img.show_image();
 
+        /**/
+
+        ImageDft imgDFT = new ImageDft( image_pmg_p5 );
+        imgDFT.computeDft();
+
     }
 
 }

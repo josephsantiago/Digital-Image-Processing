@@ -243,6 +243,7 @@ public class ImageOperations {
         }
     }
 
+    /* SAve image as png in te current directory */
     public void saveImage( String name ){
         try {
             File outputfile = new File( name + "png");

@@ -56,10 +56,12 @@ public class ImageDft {
         }
     }
 
+    /* Return the real part of FDT */
     public double [][][] getReal() {
         return this.Real;
     }
 
+    /* Return the imaginare part of FDT */
     public double [][][] getImag() {
         return this.Imag;
     }
