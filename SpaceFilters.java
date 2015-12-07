@@ -17,9 +17,12 @@ public class SpaceFilters {
 
 
     SpaceFilters( BufferedImage image ) {
-            this.DefaultImage = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB );
-            setAsDefault( image );
-            this.Image = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB );
+        this.Width = image.getWidth();
+        this.Height = image.getHeight();
+
+        this.DefaultImage = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB );
+        setAsDefault( image );
+        this.Image = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB );
     }
 
     SpaceFilters( PGM image ) {
@@ -243,7 +246,139 @@ public class SpaceFilters {
         }
     }
 
-    /* SAve image as png in te current directory */
+    /* Gradient Filter  */
+    public void gradientFilter( ) {
+        /* Mask for Gradient */
+        int [] maskX = {-1, 0, 1, -2, 0, 2, -1, 0, 1 };
+        int [] maskY = {-1, -2, -1, 0, 0, 0, 1, 2, 1 };
+
+        /* canal color */
+        int R = 0, G = 1, B = 2;
+
+        double [][][] GX = new double [ this.Height ][ this.Width ][ 3 ];
+        double [][][] GY = new double [ this.Height ][ this.Width ][ 3 ];
+
+        /* Computing gradient */
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+
+                int [][] tmp = new int[9][3];
+
+                /* Getting values around the pixel */
+                for( int offsetY = -1, cont = 0; offsetY <= 1; offsetY++ ) {
+                    for( int offsetX = -1; offsetX <= 1; offsetX++, cont++ ) {
+                        /* The invalid positions are catched*/
+                        try{
+                            Color color = new Color( this.DefaultImage.getRGB( i + offsetY, j + offsetX ) );
+                            tmp[ cont ][ R ] = color.getRed();
+                            tmp[ cont ][ G ] = color.getGreen();
+                            tmp[ cont ][ B ] = color.getBlue();
+                        }catch( Exception e ) {
+                        }
+                    }
+                }
+
+                /* Multipliying by de mask */
+                for( int k = 0; k < 9; k++ ) {
+                    GX[ i ][ j ][ R ] += maskX[ k ] * tmp[ k ][ R ];
+                    GX[ i ][ j ][ G ] += maskX[ k ] * tmp[ k ][ G ];
+                    GX[ i ][ j ][ B ] += maskX[ k ] * tmp[ k ][ B ];
+
+                    GY[ i ][ j ][ R ] += maskY[ k ] * tmp[ k ][ R ];
+                    GY[ i ][ j ][ G ] += maskY[ k ] * tmp[ k ][ G ];
+                    GY[ i ][ j ][ B ] += maskY[ k ] * tmp[ k ][ B ];
+                }
+            }
+        }
+
+        /* Gradient magnitude, result in GX*/
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                GX[ i ][ j ][R] = Math.pow( (double)( GX[i][j][R] + GY[i][j][R] ), 0.5 );
+                GX[ i ][ j ][G] = Math.pow( (double)( GX[i][j][G] + GY[i][j][G] ), 0.5 );
+                GX[ i ][ j ][B] = Math.pow( (double)( GX[i][j][B] + GY[i][j][B] ), 0.5 );
+            }
+        }
+
+        /* Setting into image */
+        for( int i = 0; i < this.Height; i++ ) {
+            for( int j = 0; j < this.Width; j++ ) {
+                try{
+                    Color color = new Color( (int)GX[i][j][R], (int)GX[i][j][G], (int)GX[i][j][B] );
+                    this.Image.setRGB( i, j, color.getRGB() );
+                }catch( Exception e ) {
+                }
+            }
+        }
+
+        /* !!!!! Check if is neccesary to scale the imagen  !!!!*/
+    }
+
+    /* Laplacian filter */
+    public void laplacianFilter( int typeMask ) {
+        if( typeMask > 3 || typeMask < 1 ) {
+            System.out.println( "Invalid Mask type" );
+            return;
+        }
+        /*Three Mask for Gradient */
+        int [][] mask =    {   {0, 1, 0, 1, -4, 1, 0, 1, 0},
+                                {1, 1, 1, 1, -8, 1, 1, 1, 1,},
+                                {-1, -1, -1, -1, 8, -1, -1, -1, -1}
+                            };
+        double [][][] L = new double [ this.Height ][ this.Width ][ 3 ];
+
+        /* canal color */
+        int R = 0, G = 1, B = 2;
+
+        /* Computing gradient */
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+
+                int [][] tmp = new int[9][3];
+                /* Getting values around the pixel */
+                for( int offsetY = -1, cont = 0; offsetY <= 1; offsetY++ ) {
+                    for( int offsetX = -1; offsetX <= 1; offsetX++, cont++ ) {
+                        /* The invalid positions are catched*/
+                        try{
+                            Color color = new Color( this.DefaultImage.getRGB( i + offsetY, j + offsetX ) );
+                            tmp[ cont ][ R ] = color.getRed();
+                            tmp[ cont ][ G ] = color.getGreen();
+                            tmp[ cont ][ B ] = color.getBlue();
+                        }catch( Exception e ) {
+                        }
+                    }
+                }
+
+                /* Multipliying by de mask */
+                for( int k = 0; k < 9; k++ ) {
+                    L[ i ][ j ][ R ] += mask[ typeMask - 1 ][ k ] * tmp[ k ][ R ];
+                    L[ i ][ j ][ G ] += mask[ typeMask - 1 ][ k ] * tmp[ k ][ G ];
+                    L[ i ][ j ][ B ] += mask[ typeMask - 1 ][ k ] * tmp[ k ][ B ];
+                }
+            }
+        }
+
+        /*  Setting into image
+            L must be added to the image to see changes, but L es the result of the Laplacian
+         */
+        int []rgb = {0,0,0};
+        for( int i = 0; i < this.Height; i++ ) {
+            for( int j = 0; j < this.Width; j++ ) {
+                try{
+                    Color color = new Color( this.DefaultImage.getRGB(i,j) );
+                    rgb[R] = color.getRed();
+                    rgb[G] = color.getGreen();
+                    rgb[B] = color.getBlue();
+
+                    color = new Color( (int)(L[i][j][R] + rgb[R]), (int)(L[i][j][G] + rgb[G]), (int)(L[i][j][B] + rgb[B]) );
+                    this.Image.setRGB( i, j, color.getRGB() );
+                }catch( Exception e ) {
+                }
+            }
+        }
+    }
+
+    /* Save image as png in te current directory */
     public void saveImage( String name ){
         try {
             File outputfile = new File( name + "png");

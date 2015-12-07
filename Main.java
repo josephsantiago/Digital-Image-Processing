@@ -38,9 +38,11 @@ public class Main {
         Img.show_default_image();
 
         //Img.toNegative();
-        Img.gammaTransformation( 2 );
+        //Img.gammaTransformation( 2 );
         //Img.histogramEqualization();
         //Img.medianFilter( 3 );
+        //Img.gradientFilter();
+        Img.laplacianFilter( 1 );
 
         Img.show_image();
 
