@@ -34,13 +34,13 @@ public class Main {
         TIFF image_tiff = new TIFF( "img/img3.tif" );
         //image_tiff.show_image();
 
-        ImageOperations Img = new ImageOperations( image_pmg_p5 );
+        SpaceFilters Img = new SpaceFilters( image_pmg_p5 );
         Img.show_default_image();
 
         //Img.toNegative();
         Img.gammaTransformation( 2 );
         //Img.histogramEqualization();
-        //Img.medianFilter( 3, 3 );
+        //Img.medianFilter( 3 );
 
         Img.show_image();
 

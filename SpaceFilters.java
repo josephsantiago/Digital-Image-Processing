@@ -8,7 +8,7 @@ import javax.imageio.*;
 import javax.imageio.stream.*;
 
 
-public class ImageOperations {
+public class SpaceFilters {
 
     private BufferedImage DefaultImage;
     private BufferedImage Image;
@@ -16,21 +16,21 @@ public class ImageOperations {
     private int MaxRGB, MinRGB;
 
 
-    ImageOperations( BufferedImage image ) {
+    SpaceFilters( BufferedImage image ) {
             this.DefaultImage = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB );
             setAsDefault( image );
             this.Image = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB );
     }
 
-    ImageOperations( PGM image ) {
+    SpaceFilters( PGM image ) {
         this( image.get_BufferedImage() );
     }
 
-    ImageOperations( TIFF image ) {
+    SpaceFilters( TIFF image ) {
         this( image.get_BufferedImage() );
     }
 
-    ImageOperations( Dicom image ) {
+    SpaceFilters( Dicom image ) {
         this( image.get_BufferedImage() );
     }
 
@@ -206,26 +206,26 @@ public class ImageOperations {
     }
 
     /* Verifica Dimensiones de la máscara */
-    private boolean checkMaskDimension( int width, int height ) {
-        if( width % 2 != 1 || height %2 != 1 || width < 0 || height < 0 )
+    private boolean checkMaskDimension( int size ) {
+        if( size % 2 != 1 || size < 0 )
             return false;
         return true;
     }
 
     /* Median filter, input => mask dimensions ( width, height ) */
-    public void medianFilter( int maskWidth, int maskHeight ) {
-        if( !checkMaskDimension( maskWidth, maskHeight ) ) {
+    public void medianFilter( int maskSize ) {
+        if( !checkMaskDimension( maskSize ) ) {
             System.out.println( "Invalid mask dimensions" );
             return;
         }
 
-        int[] valuesRGB = new int[ maskWidth*maskHeight ];
+        int[] valuesRGB = new int[ maskSize*maskSize ];
 
         for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
             for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
                 int cont = 0;
-                for( int offsetY = -maskHeight; offsetY < maskHeight; offsetY++ ) {
-                    for( int offsetX = -maskWidth; offsetX < maskWidth; offsetX++ ) {
+                for( int offsetY = -maskSize; offsetY < maskSize; offsetY++ ) {
+                    for( int offsetX = -maskSize; offsetX < maskSize; offsetX++ ) {
                         try{
                             valuesRGB[ cont ] = this.DefaultImage.getRGB( i + offsetY, j + offsetX );
                             cont++;
