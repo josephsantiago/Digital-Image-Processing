@@ -294,9 +294,9 @@ public class SpaceFilters {
         /* Gradient magnitude, result in GX*/
         for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
             for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
-                GX[ i ][ j ][R] = Math.pow( (double)( GX[i][j][R] + GY[i][j][R] ), 0.5 );
-                GX[ i ][ j ][G] = Math.pow( (double)( GX[i][j][G] + GY[i][j][G] ), 0.5 );
-                GX[ i ][ j ][B] = Math.pow( (double)( GX[i][j][B] + GY[i][j][B] ), 0.5 );
+                GX[ i ][ j ][R] = Math.pow( (double)( GX[i][j][R] * GX[i][j][R] + GY[i][j][R] * GY[i][j][R] ), 0.5 );
+                GX[ i ][ j ][G] = Math.pow( (double)( GX[i][j][G] * GX[i][j][G] + GY[i][j][G] * GY[i][j][G] ), 0.5 );
+                GX[ i ][ j ][B] = Math.pow( (double)( GX[i][j][B] * GX[i][j][B] + GY[i][j][B] * GY[i][j][B] ), 0.5 );
             }
         }
 
