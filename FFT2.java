@@ -75,8 +75,8 @@ class  FFT2 {
     }
 
     public void fft2() {
-        double [][] tmp_real[3][this.Height];
-        double [][] tmp_imag[3][this.Height];
+        double [][] tmp_real = new double[3][this.Height];
+        double [][] tmp_imag = new double[3][this.Height];
 
         /* fft for each row */
         for( int i = 0; i < this.Height; i++ ){
@@ -119,9 +119,9 @@ class  FFT2 {
         /* Conjugate */
         for( int i = 0; i < this.Width; i++ ) {
             for( int j = 0; j < this.Height; j++){
-                this.Imag[R] = -this.Imag[R];
-                this.Imag[G] = -this.Imag[G];
-                this.Imag[B] = -this.Imag[B];
+                this.Imag[R][i][j] = - this.Imag[R][i][j];
+                this.Imag[G][i][j] = - this.Imag[G][i][j];
+                this.Imag[B][i][j] = - this.Imag[B][i][j];
             }
         }
 
@@ -133,9 +133,9 @@ class  FFT2 {
         double scale = this.Width * this.Height;
         for( int i = 0; i < this.Width; i++ ) {
             for( int j = 0; j < this.Height; j++){
-                this.Imag[R] = -this.Imag[R] / scale;
-                this.Imag[G] = -this.Imag[G] / scale;
-                this.Imag[B] = -this.Imag[B] / scale;
+                this.Imag[R][i][j] = -this.Imag[R][i][j] / scale;
+                this.Imag[G][i][j] = -this.Imag[G][i][j] / scale;
+                this.Imag[B][i][j] = -this.Imag[B][i][j] / scale;
             }
         }
     }
