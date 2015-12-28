@@ -4,12 +4,13 @@
  * @autor Esau Peralta
  * @email esau.opr@gmail.com
  */
- 
+
 import java.awt.*;
 import java.awt.image.*;
 
 public class ImageDft {
 
+    /* Two Matriz for real and imaginare values, the last index is for color RGB */
     private double [][][]Real;
     private double [][][]Imag;
     private int Width;
