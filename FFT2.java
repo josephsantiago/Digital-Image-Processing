@@ -76,7 +76,7 @@ class  fft2 {
 
     public void fft2() {
         for( int i = 0; i < this.Width ){
-            
+
         }
     }
 
