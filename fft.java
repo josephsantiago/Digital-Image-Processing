@@ -5,7 +5,7 @@
  * @email esau.opr@gmail.com
  */
 
-class  fft {
+class  FFT {
 
     private static void fft_( double []Real_in, double []Imag_in, double []Real_out, double []Imag_out, int n, int step, int offset ){
         if( step < n ) {
