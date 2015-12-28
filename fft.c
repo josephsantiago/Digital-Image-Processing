@@ -1,5 +1,5 @@
 /*
- * Fast Fourier transform
+ *	Fast Fourier transform
  *	Example code obtained from http://rosettacode.org/wiki/Fast_Fourier_transform#C
  *	Added function ifft by Esaú
  *		@autor Esaú Peralta
