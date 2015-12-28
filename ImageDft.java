@@ -1,6 +1,8 @@
 /*
  * Discrete Fourier transform
  * Base: http://www.nayuki.io/page/how-to-implement-the-discrete-fourier-transform
+ * @autor Esau Peralta
+ * @email esau.opr@gmail.com
  */
 import java.awt.*;
 import java.awt.image.*;
@@ -131,7 +133,12 @@ public class ImageDft {
 
     /* Compute de DFT inverse and stored in matriz Real */
     public void iDft(  ) {
+        // Obtain Conjugate
+
         Dft();
+
+        // Obtain conjugate
+        // Scale
     }
 
 }
