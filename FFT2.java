@@ -130,7 +130,7 @@ class  FFT2 {
 
         /* conjugate and scale */
             /* Check if is the correct scale */
-        double scale = this.Width * this.Height;
+        double scale = this.Width + this.Height;
         for( int i = 0; i < this.Width; i++ ) {
             for( int j = 0; j < this.Height; j++){
                 this.Imag[R][i][j] = -this.Imag[R][i][j] / scale;
