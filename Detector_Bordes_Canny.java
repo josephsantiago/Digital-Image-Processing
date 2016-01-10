@@ -16,7 +16,7 @@ public class Detector_Bordes_Canny {
     private int MaxRGB, MinRGB;
 
 
-    SpaceFilters( BufferedImage image ) {
+    Detector_Bordes_Canny( BufferedImage image ) {
         this.Width = image.getWidth();
         this.Height = image.getHeight();
 
@@ -25,15 +25,15 @@ public class Detector_Bordes_Canny {
         this.Image = new BufferedImage( image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB );
     }
 
-    SpaceFilters( PGM image ) {
+    Detector_Bordes_Canny( PGM image ) {
         this( image.get_BufferedImage() );
     }
 
-    SpaceFilters( TIFF image ) {
+    Detector_Bordes_Canny( TIFF image ) {
         this( image.get_BufferedImage() );
     }
 
-    SpaceFilters( Dicom image ) {
+    Detector_Bordes_Canny( Dicom image ) {
         this( image.get_BufferedImage() );
     }
 
@@ -107,8 +107,23 @@ public class Detector_Bordes_Canny {
     }
 
     public void D_B_Canny(){
-        
-       
+
+        SpaceFilters ImgA = new SpaceFilters( this.DefaultImage);
+        ImgA.medianFilter( 5 );
+        //ImgA.show_image();
+
+        Color color;
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                    color = new Color( ImgA.getImage().getRGB(i,j) );
+                    this.Image.setRGB(i, j, color.getRGB() );
+                }catch( Exception e ) {
+
+                }
+            }
+        }
+
     }
 
     /* Save image as png in te current directory */
