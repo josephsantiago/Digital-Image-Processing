@@ -8,18 +8,6 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException, IOException {
 
         if( args.length > 2 ) {
-            /*
-                -f  [archivo de imagen médica]
-                -fi [archivo con nombres de imágenes]
-            */
-            /*
-            FileReader f = new FileReader(archivo);
-            BufferedReader b = new BufferedReader(f);
-            while((cadena = b.readLine())!=null) {
-                System.out.println(cadena);
-            }
-            b.close();
-            */
         }
 
         Dicom image_dcm = new Dicom( "img/dicom.dcm" );
@@ -45,9 +33,7 @@ public class Main {
         Img.laplacianFilter( 1 );
 
         Img.show_image();
-
-        /**/
-
+        
         ImageDft imgDFT = new ImageDft( image_pmg_p5 );
         //imgDFT.Dft();
 

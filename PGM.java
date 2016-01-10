@@ -101,7 +101,7 @@ public class PGM {
     }
 
     public void show_image(  ) {
-        BufferedImage image = this.Image;
+        final BufferedImage image = this.Image;
         JFrame jf = new JFrame();
 
         jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
