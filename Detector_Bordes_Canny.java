@@ -108,15 +108,21 @@ public class Detector_Bordes_Canny {
 
     public void D_B_Canny(){
 
-        SpaceFilters ImgA = new SpaceFilters( this.DefaultImage);
-        ImgA.medianFilter( 5 );
-        //ImgA.show_image();
-
+        //Aplicando suavizado Gaussiano
+        SpaceFilters ImgA = new SpaceFilters( this.DefaultImage );
+        double [][][] ImgSuavizada = ImgA.weightyFilter( );
+        
+        //Seteando la nueva imagen
+        int R, G, B;
         Color color;
         for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
             for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
                 try{
-                    color = new Color( ImgA.getImage().getRGB(i,j) );
+                   //color = new Color( ImgA.getImage().getRGB(i,j) );
+                    R = (int)ImgSuavizada[ i ][ j ][ 0 ];
+                    G = (int)ImgSuavizada[ i ][ j ][ 1 ];
+                    B = (int)ImgSuavizada[ i ][ j ][ 2 ];
+                    color = new Color(R, G, B);
                     this.Image.setRGB(i, j, color.getRGB() );
                 }catch( Exception e ) {
 
@@ -124,6 +130,63 @@ public class Detector_Bordes_Canny {
             }
         }
 
+        //Aplicando Gradiente
+        SpaceFilters ImgB = new SpaceFilters( this.Image );
+        double [][][] ImgGradMag = ImgB.gradientFilter( );
+
+        SpaceFilters ImgC = new SpaceFilters( this.Image );
+        double [][][] ImgGradDir = ImgC.gradientDirection( );
+        
+        double [][] MatGradDir = new double[ this.DefaultImage.getHeight() ][ this.DefaultImage.getWidth() ];
+
+        //Seteando la nueva imagen
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                    R = (int)ImgGradDir[ i ][ j ][ 0 ];
+                    G = (int)ImgGradDir[ i ][ j ][ 1 ];
+                    B = (int)ImgGradDir[ i ][ j ][ 2 ];
+                    color = new Color(R, G, B);
+                    MatGradDir[i][j] = color.getRGB();
+                }catch( Exception e ) {
+
+                }
+            }
+        }
+
+        supresion_no_maximos ImgD = new supresion_no_maximos( );
+        double [][][] ImgSuprecion = new double[this.DefaultImage.getHeight()][this.DefaultImage.getWidth()][3];
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                    ImgSuprecion = ImgD.supresion( ImgGradMag, MatGradDir[i][j] );
+                }catch( Exception e ) {
+
+                }
+            }
+        }
+
+        double Th=200;
+        double Tl=70;
+
+        CannyEdge ImgEdge = new CannyEdge( );
+        int [][][] ImgHysteresis = ImgEdge.hysteresis( ImgSuprecion, Th, Tl );
+
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                   //color = new Color( ImgA.getImage().getRGB(i,j) );
+                    R = (int)ImgHysteresis[ i ][ j ][ 0 ];
+                    G = (int)ImgHysteresis[ i ][ j ][ 1 ];
+                    B = (int)ImgHysteresis[ i ][ j ][ 2 ];
+                    color = new Color(R, G, B);
+                    this.Image.setRGB(i, j, color.getRGB() );
+                }catch( Exception e ) {
+
+                }
+            }
+        }
+        //ImgEdge.show_image();
     }
 
     /* Save image as png in te current directory */

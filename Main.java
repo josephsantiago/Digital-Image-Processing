@@ -22,19 +22,23 @@ public class Main {
         TIFF image_tiff = new TIFF( "img/img3.tif" );
         //image_tiff.show_image();
 
-        SpaceFilters Img = new SpaceFilters( image_pmg_p5 );
-        Img.show_default_image();
+        SpaceFilters FiltroOtsu = new SpaceFilters( image_pmg_p5 );
+        FiltroOtsu.show_default_image();
 
         //Img.toNegative();
         //Img.gammaTransformation( 2 );
         //Img.histogramEqualization();
-        //Img.medianFilter( 3 );
+        FiltroOtsu.otsu();
+        FiltroOtsu.show_image();
         //Img.gradientFilter();
-        Img.laplacianFilter( 1 );
+        //Img.laplacianFilter( 1 );
+        Detector_Bordes_Canny Img = new Detector_Bordes_Canny( image_pmg_p5 );
+        Img.show_default_image();
 
+        Img.D_B_Canny();
         Img.show_image();
         
-        ImageDft imgDFT = new ImageDft( image_pmg_p5 );
+        //ImageDft imgDFT = new ImageDft( image_pmg_p5 );
         //imgDFT.Dft();
 
     }

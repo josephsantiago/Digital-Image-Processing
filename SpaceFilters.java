@@ -602,6 +602,74 @@ public class SpaceFilters {
         return GX;
     }
 	
+    /* Direccion Gradiente  */
+    public double [][][] gradientDirection( ) {
+        /* Mask for Gradient */
+        int [] maskX = {-1, 0, 1, -2, 0, 2, -1, 0, 1 };
+        int [] maskY = {-1, -2, -1, 0, 0, 0, 1, 2, 1 };
+
+        /* canal color */
+        int R = 0, G = 1, B = 2;
+
+        double [][][] GX = new double [ this.Height ][ this.Width ][ 3 ];
+        double [][][] GY = new double [ this.Height ][ this.Width ][ 3 ];
+
+        /* Computing gradient */
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+
+                int [][] tmp = new int[9][3];
+
+                /* Getting values around the pixel */
+                for( int offsetY = -1, cont = 0; offsetY <= 1; offsetY++ ) {
+                    for( int offsetX = -1; offsetX <= 1; offsetX++, cont++ ) {
+                        /* The invalid positions are catched*/
+                        try{
+                            Color color = new Color( this.DefaultImage.getRGB( i + offsetY, j + offsetX ) );
+                            tmp[ cont ][ R ] = color.getRed();
+                            tmp[ cont ][ G ] = color.getGreen();
+                            tmp[ cont ][ B ] = color.getBlue();
+                        }catch( Exception e ) {
+                        }
+                    }
+                }
+
+                /* Multipliying by de mask */
+                for( int k = 0; k < 9; k++ ) {
+                    GX[ i ][ j ][ R ] += maskX[ k ] * tmp[ k ][ R ];
+                    GX[ i ][ j ][ G ] += maskX[ k ] * tmp[ k ][ G ];
+                    GX[ i ][ j ][ B ] += maskX[ k ] * tmp[ k ][ B ];
+
+                    GY[ i ][ j ][ R ] += maskY[ k ] * tmp[ k ][ R ];
+                    GY[ i ][ j ][ G ] += maskY[ k ] * tmp[ k ][ G ];
+                    GY[ i ][ j ][ B ] += maskY[ k ] * tmp[ k ][ B ];
+                }
+            }
+        }
+
+        double aRadR, aRadG, aRadB;
+        double [][][] alfa = new double [ this.Height ][ this.Width ][ 3 ];
+        double [][][] direccion = new double [ this.Height ][ this.Width ][ 3 ];
+        /* Gradient magnitude, result in GX*/
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                aRadR = Math.atan2(GX[i][j][R] * GX[i][j][R], GY[i][j][R] * GY[i][j][R]);
+                aRadG = Math.atan2(GX[i][j][G] * GX[i][j][G], GY[i][j][G] * GY[i][j][G]);
+                aRadB = Math.atan2(GX[i][j][B] * GX[i][j][B], GY[i][j][B] * GY[i][j][B]);
+
+                alfa[i][j][0] = Math.toDegrees(aRadR);
+                alfa[i][j][1] = Math.toDegrees(aRadG);
+                alfa[i][j][2] = Math.toDegrees(aRadB);
+
+                direccion[i][j][0] = 90 - alfa[i][j][0];
+                direccion[i][j][1] = 90 - alfa[i][j][1];
+                direccion[i][j][2] = 90 - alfa[i][j][2];
+            }
+        }
+
+        return direccion;
+    }
+
     /* Laplacian filter */
     public double [][][] laplacianFilter( int typeMask ) {
         if( typeMask > 3 || typeMask < 1 ) {
@@ -746,6 +814,240 @@ magnitudGradiente = boxFilter();
 
     }
 
+
+
+
+public void otsu( ){
+    //Calcular el historial normalizado
+    Color color;
+    int R,G,B;
+    int[][] histogram = new int[256][3];
+    double[][] histogramNormalizado = new double[256][3];
+    int nivelIntensidad = 255;
+    /* Getting histogram */
+     for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                    color = new Color( this.DefaultImage.getRGB(i,j) );
+                    R = color.getRed();
+                    G = color.getGreen();
+                    B = color.getBlue();
+                    histogram[R][0] ++;
+                    histogram[G][1] ++;
+                    histogram[B][2] ++;
+                }catch( Exception e ) {
+
+                }
+            }
+        }
+  
+    //1.- Calcular el historial normalizado
+    for(int i = 0; i < 256; i++) {
+        histogramNormalizado[i][0] = (double) histogram[i][0] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+        histogramNormalizado[i][1] = (double) histogram[i][1] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+        histogramNormalizado[i][2] = (double) histogram[i][2] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+    }
+    //2.- Calcular la suma acumulada
+    //Valores para almacenar la suma acumulada
+
+    double[] sumR = new double [256];
+    double[] sumG = new double [256];
+    double[] sumB = new double [256];
+    double[][] pI = new double [256][3];
+   
+    double pr = 0;
+    double pg = 0;
+    double pb = 0;
+    for (int i = 0; i < 256; i++) {
+        pr = 0;
+        pg = 0;
+        pb = 0;
+        for (int j = 0; j <= i; j++ ) {
+            pr = pr +  histogramNormalizado[j][0];
+            pg = pg +  histogramNormalizado[j][1];
+            pb = pb +  histogramNormalizado[j][2];
+        }
+
+        pI[i][0] = pr;
+        pI[i][1] = pg;
+        pI[i][2] = pb;
+    }   
+
+//3.- Calcular la media acumulada
+    double[][] media = new double [256][3];
+    double mr,mg,mb;
+   
+    for (int i = 0; i < 256 ; i++) {
+        mr = 0;
+        mg = 0;
+        mb = 0;
+
+        for (int j = 0; j <=i ; j++) {
+            mr = mr * pI[j][0];   
+            mg = mg * pI[j][1];
+            mb = mb * pI[j][2];
+        }
+
+        media [i][0] = mr;
+        media [i][1] = mg;
+        media [i][2] = mb;
+    }
+
+//4 Calcular la media global
+     double mediaGlobalR = 0;
+     double mediaGlobalG = 0;
+     double mediaGlobalB = 0;
+
+
+     for (int i = 0; i < 256; i++) {
+         mediaGlobalR = mediaGlobalR + media[i][0];
+         mediaGlobalG = mediaGlobalG + media[i][1];
+         mediaGlobalB = mediaGlobalB + media[i][2];
+     }
+// 5.- Calcular la varianza entre clases
+
+    double[][] sigma2B = new double[256][3];
+    for (int i = 0; i < 256 ; i ++) {
+        sigma2B [i][0] = ((mediaGlobalR * pI[i][0] - media[i][0]) * (mediaGlobalR * pI[i][0] - media[i][0])) / ( pI[i][0] * (1 - pI[i][0]));
+        sigma2B [i][1] = ((mediaGlobalG * pI[i][1] - media[i][1]) * (mediaGlobalG * pI[i][1] - media[i][1])) / ( pI[i][1] * (1 - pI[i][1]));
+        sigma2B [i][2] = ((mediaGlobalB * pI[i][2] - media[i][2]) * (mediaGlobalB * pI[i][2] - media[i][2])) / ( pI[i][2] * (1 - pI[i][2]));
+    }
+
+// 6.- Obtener el valor de umbral de Otsu, K ∗ , como el valor de k que
+    int numkr = 0;
+    int numkg = 0;
+    int numkb = 0;
+
+    double maxr = 0;
+    double maxg = 0;
+    double maxb = 0;
+
+    int[] kr = new int [256];
+    int[] kg = new int [256];
+    int[] kb = new int [256];
+
+//Obtener el maximo
+    for (int i = 0; i < 256; i++) {
+       
+        if(maxr <= sigma2B[i][0])
+            maxr = sigma2B[i][0];
+
+        if(maxg <= sigma2B[i][1])
+            maxg = sigma2B[i][1];
+
+        if(maxb <= sigma2B[i][2])
+            maxb =  sigma2B[i][2];
+    }
+//cuantas veces se encuentra el max y guardar la posicion
+    for (int i = 0; i< 256; i++ ) {
+        if (sigma2B[i][0] == maxr){
+
+            kr[numkr] = i;
+            numkr ++;
+
+        }
+        if (sigma2B[i][1] == maxg){
+           
+            kg[numkg] = i;
+            numkg ++;
+
+        }
+        if (sigma2B[i][2] == maxb){
+           
+            kb[numkb] = i;
+            numkb ++;
+
+        }  
+
+    }
+//Verificar si k fue el unico, sino promediar
+    int temp = 0;
+   
+    int k0 = 0; //R
+    int k1 = 0; //G
+    int k2 = 0; //B
+
+
+    if (numkr > 1){
+      //Hay que promediar los krs 
+      for (int i = 0; i < numkr ; i++) {
+          temp = temp + kr[i]; 
+        } 
+        k0 = temp / numkr;
+    }
+
+    else {
+        k0 = kr[0];
+    }
+    temp = 0;
+
+    if (numkg > 1){
+      //Hay que promediar los krs 
+      for (int i = 0; i < numkg ; i++) {
+          temp = temp + kg[i]; 
+        } 
+        k1 = temp / numkg;
+    }
+
+    else {
+        k1 = kg[0];
+    }
+
+    temp = 0;
+
+    if (numkb > 1){
+      //Hay que promediar los krs 
+      for (int i = 0; i < numkb ; i++) {
+          temp = temp + kb[i]; 
+        } 
+        k2 = temp / numkb;
+    }
+
+    else {
+        k2 = kb[0];
+    }
+//7- Obtener la imagen umbralizada(segmentada)
+    /*g(x,y) = 1 if f(x,y) <= k
+             = 0 de otra forma
+              */
+    int []rgb = {0,0,0};
+    int gxr, gxg, gxb;
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                    color = new Color( this.DefaultImage.getRGB(i,j) );
+                    rgb[0] = color.getRed();
+                    rgb[1] = color.getGreen();
+                    rgb[2] = color.getBlue();
+
+                    if (rgb[0] <= k0)
+                        gxr = 255;
+                    else
+                        gxr = 0;
+
+                    if (rgb[1] <= k1)
+                        gxg = 255;
+                    else
+                        gxg = 0;
+
+                    if (rgb[2] <= k2)
+                        gxb = 255;
+                    else
+                        gxb = 0;
+
+                    color = new Color( (int)(gxr), (int)(gxg), (int)(gxb) );
+                   
+
+                    this.Image.setRGB( i, j, color.getRGB() );
+                }catch( Exception e ) {
+                }
+            }
+        }           
+
+
+    }
+
+    
     /* Save image as png in te current directory */
     public void saveImage( String name ){
         try {
