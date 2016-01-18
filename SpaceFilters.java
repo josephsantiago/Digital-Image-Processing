@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.StringTokenizer;
 import javax.imageio.*;
 import javax.imageio.stream.*;
-
+import java.lang.Math;
 
 public class SpaceFilters {
 
@@ -752,29 +752,6 @@ public class SpaceFilters {
         //Suavizar la imagen del gradiente
         //magnitudGradiente = suavizado(magnitudGradiente);
 
-/*
-        BufferImage 
-        int []rgb = {0,0,0};
-        for( int i = 0; i < this.Height; i++ ) {
-            for( int j = 0; j < this.Width; j++ ) {
-                try{
-                    Color color = new Color( this.DefaultImage.getRGB(i,j) );
-                    rgb[R] = color.getRed();
-                    rgb[G] = color.getGreen();
-                    rgb[B] = color.getBlue();
-
-                    color = new Color( (int)(magnitudGradiente [i][j][R] + rgb[R]), (int)(magnitudGradiente [i][j][G] + rgb[G]), (int)(magnitudGradiente [i][j][B] + rgb[B]) );
-                    this.Image.setRGB( i, j, color.getRGB() );
-                }catch( Exception e ) {
-                }
-            }
-        }
-	
-magnitudGradiente = boxFilter();
-
-*/
-
-
 
         //Multiplicar la magnitud suavizada del gradient por el laplaciano
         laplaciano = laplacianFilter(1);
@@ -808,13 +785,57 @@ magnitudGradiente = boxFilter();
             }
         }
 
-
-
-
-
     }
 
+    //Recibe el centro de gravedad de la imagen (x,y)
+    public Vector Distancia_Radial_Normalizada(int x,int y){
+    Color color;
+    int R,G,B;
+    Vector Vec =new Vector();
 
+    //Encontrar el vector distancia
+     for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                    color = new Color( this.DefaultImage.getRGB(i,j) );
+                    R = color.getRed();
+                    G = color.getGreen();
+                    B = color.getBlue();
+                    if (R==255 && G==255 && B==255  ){
+                        int  x1=i;
+                        int y1=j;
+
+                        double dist=Math.sqrt((double)((x-x1)*(x-x1)+(y-y1)*(y-y1)));
+                        Vec.addElement(dist);
+                        //System.out.println(dist);
+                    }      
+                }catch( Exception e ) {
+
+                }
+            }
+        }
+        //Encontrar el maximo del vector distancia
+        double max_vec=0;
+        for (int i=0; i< Vec.size(); i++){
+            if((double)Vec.elementAt(i)>max_vec ){
+                max_vec=(double)Vec.elementAt(i);
+            }
+        }
+    
+        Vector Vec2 =new Vector();
+       
+        //Normalizar el vector distancia
+        for (int i=0; i< Vec.size(); i++){
+            Vec2.addElement((double)Vec.elementAt(i)/max_vec);
+        }
+
+        //for (int i=0; i<Vec2.size();i++ ) {
+        //    System.out.println(i+"\t"+Vec2.elementAt(i));
+        //}
+        
+        return Vec2;
+
+     }
 
 
 public void otsu( ){
@@ -873,7 +894,7 @@ public void otsu( ){
         pI[i][2] = pb;
     }   
 
-//3.- Calcular la media acumulada
+    //3.- Calcular la media acumulada
     double[][] media = new double [256][3];
     double mr,mg,mb;
    
@@ -893,7 +914,7 @@ public void otsu( ){
         media [i][2] = mb;
     }
 
-//4 Calcular la media global
+  //4 Calcular la media global
      double mediaGlobalR = 0;
      double mediaGlobalG = 0;
      double mediaGlobalB = 0;
@@ -904,7 +925,7 @@ public void otsu( ){
          mediaGlobalG = mediaGlobalG + media[i][1];
          mediaGlobalB = mediaGlobalB + media[i][2];
      }
-// 5.- Calcular la varianza entre clases
+ // 5.- Calcular la varianza entre clases
 
     double[][] sigma2B = new double[256][3];
     for (int i = 0; i < 256 ; i ++) {
@@ -913,7 +934,7 @@ public void otsu( ){
         sigma2B [i][2] = ((mediaGlobalB * pI[i][2] - media[i][2]) * (mediaGlobalB * pI[i][2] - media[i][2])) / ( pI[i][2] * (1 - pI[i][2]));
     }
 
-// 6.- Obtener el valor de umbral de Otsu, K ∗ , como el valor de k que
+ // 6.- Obtener el valor de umbral de Otsu, K ∗ , como el valor de k que
     int numkr = 0;
     int numkg = 0;
     int numkb = 0;
@@ -926,7 +947,7 @@ public void otsu( ){
     int[] kg = new int [256];
     int[] kb = new int [256];
 
-//Obtener el maximo
+ //Obtener el maximo
     for (int i = 0; i < 256; i++) {
        
         if(maxr <= sigma2B[i][0])
@@ -938,7 +959,7 @@ public void otsu( ){
         if(maxb <= sigma2B[i][2])
             maxb =  sigma2B[i][2];
     }
-//cuantas veces se encuentra el max y guardar la posicion
+ //cuantas veces se encuentra el max y guardar la posicion
     for (int i = 0; i< 256; i++ ) {
         if (sigma2B[i][0] == maxr){
 
@@ -960,7 +981,7 @@ public void otsu( ){
         }  
 
     }
-//Verificar si k fue el unico, sino promediar
+ //Verificar si k fue el unico, sino promediar
     int temp = 0;
    
     int k0 = 0; //R
@@ -1006,7 +1027,7 @@ public void otsu( ){
     else {
         k2 = kb[0];
     }
-//7- Obtener la imagen umbralizada(segmentada)
+ //7- Obtener la imagen umbralizada(segmentada)
     /*g(x,y) = 1 if f(x,y) <= k
              = 0 de otra forma
               */
@@ -1042,12 +1063,8 @@ public void otsu( ){
                 }catch( Exception e ) {
                 }
             }
-        }           
+        } }          
 
-
-    }
-
-    
     /* Save image as png in te current directory */
     public void saveImage( String name ){
         try {
