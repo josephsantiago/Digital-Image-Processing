@@ -23,20 +23,20 @@ public class Main {
         //image_tiff.show_image();
 
         SpaceFilters FiltroOtsu = new SpaceFilters( image_pmg_p5 );
-        FiltroOtsu.show_default_image();
+        //FiltroOtsu.show_default_image();
 
         //Img.toNegative();
         //Img.gammaTransformation( 2 );
         //Img.histogramEqualization();
-        FiltroOtsu.otsu();
-        FiltroOtsu.show_image();
+        //FiltroOtsu.otsu();
+        //FiltroOtsu.show_image();
         //Img.gradientFilter();
         //Img.laplacianFilter( 1 );
-        Detector_Bordes_Canny Img = new Detector_Bordes_Canny( image_pmg_p5 );
+        Detector_Bordes_Canny Img = new Detector_Bordes_Canny( image_dcm );
         Img.show_default_image();
 
         Img.D_B_Canny();
-        Img.show_image();
+        //Img.show_image();
         
         //ImageDft imgDFT = new ImageDft( image_pmg_p5 );
         //imgDFT.Dft();
