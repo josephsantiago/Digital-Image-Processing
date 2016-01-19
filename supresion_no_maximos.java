@@ -1,6 +1,5 @@
 public class supresion_no_maximos {
 
-    
     public double [][][] supresion (double [][][] mag, double [][][] dir ) {
 
         int rows = mag[0].length;
@@ -46,10 +45,9 @@ public class supresion_no_maximos {
                             gn[i][j][color]=mag[i][j][color];
                         }
                     }
-
-                }
-            }
-        }
+              }
+          }
+      }
 
         return gn;
     }

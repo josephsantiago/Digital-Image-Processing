@@ -143,7 +143,7 @@ public class Detector_Bordes_Canny {
         supresion_no_maximos ImgD = new supresion_no_maximos( );
         double [][][] ImgSuprecion = ImgD.supresion( ImgGradMag, ImgGradDir );
                 
-        /*for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
             for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
                 try{
                    //color = new Color( ImgA.getImage().getRGB(i,j) );
@@ -157,7 +157,7 @@ public class Detector_Bordes_Canny {
                 }
             }
         }
-        this.show_image();*/
+        this.show_image();
         double Th=100;
         double Tl=50;
 
