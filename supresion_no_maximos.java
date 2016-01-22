@@ -2,27 +2,28 @@
 public class supresion_no_maximos {
 
     
-    public double [][][] supresion (double [][][] mag, double [][] dir1 ) {
+    public double [][][] supresion (double [][][] mag, double [][][] dir1 ) {
 
         int rows = mag[0].length;
         int cols = mag[0][0].length;
 
-        double [][] dir= new double[rows][cols];
+        double [][] dir= new double[3][rows][cols];
 
         for(int i=0; i< rows; i++){
             for (int j = 0; j < cols; j++) {
-                if((dir1 [i][j]>=-22.5 && dir1 [i][j]<22.5)|| (dir1 [i][j]>=157.5 && dir1 [i][j]<-157.5))
-                    dir[i][j]=0;   //borde vertical
+               for(int color = 0; color < 3; color++) {
+                  if((dir1 [i][j]>=-22.5 && dir1 [i][j]<22.5)|| (dir1 [i][j]>=157.5 && dir1 [i][j]<-157.5))
+                      dir[i][j]=0;   //borde vertical
 
-                if((dir1 [i][j]>=22.5 && dir1 [i][j]<67.5) || (dir1 [i][j]>=-157.5 && dir1 [i][j]< -112.5))
-                    dir[i][j]= 45;
+                  if((dir1 [i][j]>=22.5 && dir1 [i][j]<67.5) || (dir1 [i][j]>=-157.5 && dir1 [i][j]< -112.5))
+                      dir[i][j]= 45;
 
-                if((dir1 [i][j]>=67.5 && dir1 [i][j]<112.5) || (dir1 [i][j]>= -112.5 && dir1 [i][j]< -67.5))
-                    dir[i][j]= 90;
+                  if((dir1 [i][j]>=67.5 && dir1 [i][j]<112.5) || (dir1 [i][j]>= -112.5 && dir1 [i][j]< -67.5))
+                      dir[i][j]= 90;
 
-                 if((dir1 [i][j]>=112.5 && dir1 [i][j]<157.5) || (dir1 [i][j]>= -67.5 && dir1 [i][j]< -22.5))
-                    dir[i][j]= 135;
-
+                   if((dir1 [i][j]>=112.5 && dir1 [i][j]<157.5) || (dir1 [i][j]>= -67.5 && dir1 [i][j]< -22.5))
+                      dir[i][j]= 135;
+                  }
             }
         }
 
