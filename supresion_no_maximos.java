@@ -1,53 +1,74 @@
+@@ -1,5 +1,55 @@
 public class supresion_no_maximos {
 
-    public double [][][] supresion (double [][][] mag, double [][][] dir ) {
+    
+    public double [][][] supresion (double [][][] mag, double [][] dir1 ) {
 
         int rows = mag[0].length;
         int cols = mag[0][0].length;
-        double  [][][] gn = new double [ rows ][ cols ][3];
+
+        double [][] dir= new double[rows][cols];
+
+        for(int i=0; i< rows; i++){
+            for (int j = 0; j < cols; j++) {
+                if((dir1 [i][j]>=-22.5 && dir1 [i][j]<22.5)|| (dir1 [i][j]>=157.5 && dir1 [i][j]<-157.5))
+                    dir[i][j]=0;   //borde vertical
+
+                if((dir1 [i][j]>=22.5 && dir1 [i][j]<67.5) || (dir1 [i][j]>=-157.5 && dir1 [i][j]< -112.5))
+                    dir[i][j]= 45;
+
+                if((dir1 [i][j]>=67.5 && dir1 [i][j]<112.5) || (dir1 [i][j]>= -112.5 && dir1 [i][j]< -67.5))
+                    dir[i][j]= 90;
+
+                 if((dir1 [i][j]>=112.5 && dir1 [i][j]<157.5) || (dir1 [i][j]>= -67.5 && dir1 [i][j]< -22.5))
+                    dir[i][j]= 135;
+
+            }
+        }
+
+
+        double  [][][] gn = new double [3][ rows ][ cols ];
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 for(int color = 0; color < 3; color++) {
-                    int py1 = i + 1;
-                    int py2 = i - 1;
-                    int px1 = j + 1;
-                    int px2 = j - 1;
-                    //Borde en direccion Horizontal
-                    if ( (dir[i][j][color] > 67.5 && dir[i][j][color] <= 112.5) || (dir[i][j][color] > -112.5 && dir[i][j][color] <= -67.5) ){
-                        if( (px2 > 0 && px1 < cols) && (mag[i][j][color] < mag[i][j-1][color] || mag[i][j][color] < mag[i][j+1][color]) ){
-                            gn[i][j][color]=0;          
-                        }else{
-                            gn[i][j][color]=mag[i][j][color];
-                        }
+
+                    if (dir[i][j] == 0 ){ // Se trata de un borde vertical
+                       if( mag[color][ i ][ j ] < mag[color][ i ][ j -1 ] || mag[color][ i ][ j ] < mag[color][ i ][ j+1 ]){
+                           gn[color][i][j]=0;
+                       }
+                       else {
+                        gn[color][i][j]=mag[color][i][j] ;
+                       }
                     }
-                    //Borde en direccion Vertical
-                    else if( (dir[i][j][color] > 157.5 && dir[i][j][color] <= 180) || (dir[i][j][color] > -22.5 && dir[i][j][color] <= -22.5) || (dir[i][j][color] >= -180 && dir[i][j][color] <= -157.5) ){
-                        if( (py2 > 0 && py1 < rows) && (mag[i][j][color] < mag[i-1][j][color] || mag[i][j][color] < mag[i+1][j][color]) ){
-                            gn[i][j][color]=0;          
-                        }else{
-                            gn[i][j][color]=mag[i][j][color];
-                        }
+                    else if (dir[i][j] == 45){ // Se trata de un borde a 45
+                       if( mag[color][ i ][ j ] < mag[color][ i -1 ][ j +1 ] || mag[color][ i ][ j ] < mag[color][ i +1][ j-1 ]){
+                           gn[color][i][j]=0;
+                       }
+                       else {
+                        gn[color][i][j]=mag[color][i][j] ;
+                       }
                     }
-                    //Borde en direccion de 45°
-                    else if( (dir[i][j][color] > 22.5 && dir[i][j][color] <= 67.5) || (dir[i][j][color] > -157.5 && dir[i][j][color] <= -112.5) ){
-                        if( (px2 > 0 && px1 < cols) && (py2 > 0 && py1 < rows) && (mag[i][j][color] < mag[i+1][j-1][color] || mag[i][j][color] < mag[i-1][j+1][color])){
-                            gn[i][j][color]=0;          
-                        }else{
-                            gn[i][j][color]=mag[i][j][color];
-                        }
+                    else if (dir[i][j] == 90) { // Se trata de un borde horizontal
+                       if( mag[color][ i ][ j ] < mag[color][ i -1][ j  ] || mag[color][ i ][ j ] < mag[color][ i +1][ j ]){
+                           gn[color][i][j]=0;
+                       }
+                       else {
+                        gn[color][i][j]=mag[color][i][j] ;
+                       }
                     }
-                    //Borde en direccion de -45°
-                    else if( (dir[i][j][color] > 112.5 && dir[i][j][color] <= 157.5) || (dir[i][j][color] > -67 && dir[i][j][color] <= -22.5) ){
-                        if( (px2 > 0 && px1 < cols) && (py2 > 0 && py1 < rows) && (mag[i][j][color] < mag[i-1][j-1][color] || mag[i][j][color] < mag[i+1][j+1][color])){
-                            gn[i][j][color]=0;          
-                        }else{
-                            gn[i][j][color]=mag[i][j][color];
-                        }
+                    else if(dir[i][j] == 135) { //Se trata de un borde a -45
+                       if( mag[color][ i ][ j ] < mag[color][ i -1][ j -1 ] || mag[color][ i ][ j ] < mag[color][ i+1 ][ j+1 ]){
+                           gn[color][i][j]=0;
+                       }
+                       else {
+                        gn[color][i][j]=mag[color][i][j] ;
+                       }
                     }
-              }
-          }
-      }
+
+                }
+            }
+        }
 
         return gn;
     }
