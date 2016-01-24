@@ -134,7 +134,7 @@ public class Detector_Bordes_Canny {
         //Obteniendo magnitud de gradiente
         SpaceFilters ImgB = new SpaceFilters( this.DefaultImage );
         double [][][] ImgGradMag = ImgB.gradientFilter( );
-
+        
         //Obteniendo direccion de gradiente
         SpaceFilters ImgC = new SpaceFilters( this.DefaultImage );
         double [][][] ImgGradDir = ImgC.gradientDirection( );
@@ -143,23 +143,8 @@ public class Detector_Bordes_Canny {
         supresion_no_maximos ImgD = new supresion_no_maximos( );
         double [][][] ImgSuprecion = ImgD.supresion( ImgGradMag, ImgGradDir );
                 
-        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
-            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
-                try{
-                   //color = new Color( ImgA.getImage().getRGB(i,j) );
-                    R = (int)ImgSuprecion[ i ][ j ][ 0 ];
-                    G = (int)ImgSuprecion[ i ][ j ][ 1 ];
-                    B = (int)ImgSuprecion[ i ][ j ][ 2 ];
-                    color = new Color(R, G, B);
-                    this.Image.setRGB(i, j, color.getRGB() );
-                }catch( Exception e ) {
-
-                }
-            }
-        }
-        this.show_image();
-        double Th=100;
-        double Tl=50;
+        double Th=75;
+        double Tl=170;
 
         CannyEdge ImgEdge = new CannyEdge( );
         int [][][] ImgHysteresis = ImgEdge.hysteresis( ImgSuprecion, Th, Tl );

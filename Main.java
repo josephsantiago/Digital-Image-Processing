@@ -27,6 +27,9 @@ public class Main {
         PGM image_Drn = new PGM( "img/img1.pgm" );
         //image_pmg_p2.show_image();
 
+        TIFF image_tiff_frut = new TIFF( "img/frutasGrises.tif" );
+        //image_tiff.show_image();
+
         PGM image_pmg_p5 = new PGM( "img/img2_p5.pgm" );
         //image_pmg_p5.show_image();
 
@@ -34,14 +37,15 @@ public class Main {
         //image_tiff.show_image();
 
 
-        SpaceFilters FiltroOtsu = new SpaceFilters( image_pmg_p5 );
-        SpaceFilters Drn= new SpaceFilters( image_Drn );
-        Drn.show_default_image();
+        //SpaceFilters FiltroOtsu = new SpaceFilters( image_pmg_p5 );
+        //SpaceFilters Drn= new SpaceFilters( image_Drn );
+        //Drn.show_default_image();
 
-        Vector Vec =new Vector();
+        //Vector Vec =new Vector();
 
-        Vec=Drn.Distancia_Radial_Normalizada(127,127);
+        //ec=Drn.Distancia_Radial_Normalizada(127,127);
 
+        
         //for (int i=0; i<Vec.size();i++ ) {
         //   System.out.println(i+"\t"+Vec.elementAt(i));
         //}
@@ -55,7 +59,7 @@ public class Main {
         //FiltroOtsu.show_image();
         //Img.gradientFilter();
         //Img.laplacianFilter( 1 );
-        Detector_Bordes_Canny Img = new Detector_Bordes_Canny( image_dcm );
+        Detector_Bordes_Canny Img = new Detector_Bordes_Canny( image_tiff_frut );
         Img.show_default_image();
 
         Img.D_B_Canny();
