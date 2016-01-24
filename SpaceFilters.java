@@ -539,7 +539,7 @@ public class SpaceFilters {
     }
 	/*End box Filter*/
 
-    
+
     /* Gradient Filter  */
     public double [][][] gradientFilter( ) {
         /* Mask for Gradient */
@@ -793,56 +793,6 @@ public class SpaceFilters {
         }
 
     }
-
-    //Recibe el centro de gravedad de la imagen (x,y)
-    public Vector Distancia_Radial_Normalizada(int x,int y){
-    Color color;
-    int R,G,B;
-    Vector Vec =new Vector();
-
-    //Encontrar el vector distancia
-     for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
-            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
-                try{
-                    color = new Color( this.DefaultImage.getRGB(i,j) );
-                    R = color.getRed();
-                    G = color.getGreen();
-                    B = color.getBlue();
-                    if (R==255 && G==255 && B==255  ){
-                        int  x1=i;
-                        int y1=j;
-
-                        double dist=Math.sqrt((double)((x-x1)*(x-x1)+(y-y1)*(y-y1)));
-                        Vec.addElement(dist);
-                        //System.out.println(dist);
-                    }
-                }catch( Exception e ) {
-
-                }
-            }
-        }
-        //Encontrar el maximo del vector distancia
-        double max_vec=0;
-        for (int i=0; i< Vec.size(); i++){
-            if((double)Vec.elementAt(i)>max_vec ){
-                max_vec=(double)Vec.elementAt(i);
-            }
-        }
-
-        Vector Vec2 =new Vector();
-
-        //Normalizar el vector distancia
-        for (int i=0; i< Vec.size(); i++){
-            Vec2.addElement((double)Vec.elementAt(i)/max_vec);
-        }
-
-        //for (int i=0; i<Vec2.size();i++ ) {
-        //    System.out.println(i+"\t"+Vec2.elementAt(i));
-        //}
-
-        return Vec2;
-
-     }
 
 
 public void otsu( ){
