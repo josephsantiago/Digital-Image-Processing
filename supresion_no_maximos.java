@@ -30,48 +30,20 @@ public class supresion_no_maximos {
                   }
                   
             }
-        }
-        for(int i=0; i< cols; i++){
-            for (int j = 0; j < rows; j++) {
-                for(int color = 0; color < 3; color++) {
-                    System.out.print(Math.round(dir1[i][j][color]) +"    ");
-                }                  
-            }
-            System.out.println("");
-            System.out.println("___________________________________");
         }*/
 
         for(int i=0; i< rows; i++){
             for (int j = 0; j < cols; j++) {
                 for(int color = 0; color < 3; color++) {
-
                     if((dir1[i][j][color]>-22.5 && dir1[i][j][color]<=22.5)|| (dir1[i][j][color]>157.5 && dir1[i][j][color]<=180)  || (dir1[i][j][color]>=-180 && dir1[i][j][color]<=-157)){
-                        //System.out.println("---"+dir1[i][j][color]+"---");
-                        dir[i][j][color]=0;   //borde vertical
-                        //System.out.println("____"+dir[i][j][color]+"____");
-                    }
-
-                    else if((dir1 [i][j][color]>22.5 && dir1[i][j][color]<=67.5) || (dir1[i][j][color]>-157.5 && dir1[i][j][color]<= -112.5)){
-                        //System.out.println("---"+dir1[i][j][color]+"---");
+                        dir[i][j][color]=0;
+                    } else if((dir1 [i][j][color]>22.5 && dir1[i][j][color]<=67.5) || (dir1[i][j][color]>-157.5 && dir1[i][j][color]<= -112.5)){
                         dir[i][j][color]= 45;
-                        //System.out.println("____"+dir[i][j][color]+"____");
-                    }
-                        
-
-                    else if((dir1[i][j][color]>67.5 && dir1 [i][j][color]<=112.5) || (dir1 [i][j][color]> -112.5 && dir1[i][j][color]<= -67.5)){
-                        //System.out.println("---"+dir1[i][j][color]+"---");
+                    } else if((dir1[i][j][color]>67.5 && dir1 [i][j][color]<=112.5) || (dir1 [i][j][color]> -112.5 && dir1[i][j][color]<= -67.5)){
                         dir[i][j][color]= 90;
-                        //System.out.println("____"+dir[i][j][color]+"____");
-                    }
-                        
-
-                    else if((dir1[i][j][color]>112.5 && dir1[i][j][color]<=157.5) || (dir1[i][j][color]> -67.5 && dir1[i][j][color]<= -22.5)){
-                        //System.out.println("---"+dir1[i][j][color]+"---");
+                    } else if((dir1[i][j][color]>112.5 && dir1[i][j][color]<=157.5) || (dir1[i][j][color]> -67.5 && dir1[i][j][color]<= -22.5)){
                         dir[i][j][color]= 135;
-                        //System.out.println("____"+dir[i][j][color]+"____");
                     }
-                        
-                    //System.out.println(dir1[i][j][color]);
                 }                  
             }
         }
@@ -121,15 +93,6 @@ public class supresion_no_maximos {
 
                 }
             }
-        }
-        for(int i=0; i< cols; i++){
-            for (int j = 0; j < rows; j++) {
-                for(int color = 0; color < 3; color++) {
-                    System.out.print(gn[i][j][color] +"    ");
-                }                  
-            }
-            System.out.println("");
-            System.out.println("___________________________________");
         }
         return gn;
     }
