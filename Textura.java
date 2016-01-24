@@ -150,7 +150,6 @@ public class Textura{
 
         double []sum = {0, 0, 0};
 
-        /* Getting histogram */
         for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
             for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
                 try{
@@ -167,7 +166,7 @@ public class Textura{
         }
 
         for (int color = 0; color < 3; color ++) {
-            sum[ color ] = 1.0 - 1.0 /( 1.0 + sum[ color ]);
+            sum[ color ] = 1.0 - 1.0 / ( 1.0 + sum[ color ]);
         }
 
         return sum;
