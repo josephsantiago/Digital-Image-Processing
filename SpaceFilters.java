@@ -247,7 +247,7 @@ public class SpaceFilters {
     }
 	/*Max Filter input: None, Output: duble[][][]*/
 	int [] getMax( int [][]Neighborhood){
-		
+
 		int R = 0, G = 1, B = 2;
 		int max[] = {0,0,0};
 		max[R] = Neighborhood[0][R];
@@ -260,11 +260,13 @@ public class SpaceFilters {
 				max[G] = Neighborhood[i][G];
 			if( max[B] < Neighborhood[i][B] )
 				max[B] = Neighborhood[i][B];
-		}	
+		}
 		return max;
 	}
+
+
 	public double [][][] maxFilter( ) {
-                      
+
         double [][][] L = new double [ this.Height ][ this.Width ][ 3 ];
 
         /* canal color */
@@ -291,12 +293,12 @@ public class SpaceFilters {
 
                 /* Multipliying by de mask */
 				int []maximos = getMax(tmp);
-				
-                
+
+
                 L[ i ][ j ][ R ] += maximos[ R ] ;
                 L[ i ][ j ][ G ] += maximos[ G ] ;
                 L[ i ][ j ][ B ] += maximos[ B ] ;
-                
+
             }
         }
 
@@ -323,9 +325,10 @@ public class SpaceFilters {
     }
 	/*End MAX Filter*/
 
+
 	/*Min Filter input: None, Output: duble[][][]*/
-	int [] getMin( int [][]Neighborhood){
-		
+	public int [] getMin( int [][]Neighborhood){
+
 		int R = 0, G = 1, B = 2;
 		int max[] = {0,0,0};
 		max[R] = Neighborhood[0][R];
@@ -338,11 +341,13 @@ public class SpaceFilters {
 				max[G] = Neighborhood[i][G];
 			if( max[B] > Neighborhood[i][B] )
 				max[B] = Neighborhood[i][B];
-		}	
+		}
 		return max;
 	}
+
+
 	public double [][][] minFilter( ) {
-                      
+
         double [][][] L = new double [ this.Height ][ this.Width ][ 3 ];
 
         /* canal color */
@@ -369,12 +374,12 @@ public class SpaceFilters {
 
                 /* Multipliying by de mask */
 				int []maximos = getMin(tmp);
-				
-                
+
+
                 L[ i ][ j ][ R ] += maximos[ R ] ;
                 L[ i ][ j ][ G ] += maximos[ G ] ;
                 L[ i ][ j ][ B ] += maximos[ B ] ;
-                
+
             }
         }
 
@@ -403,15 +408,15 @@ public class SpaceFilters {
 
 	/*Box Filter input: None, Output: duble[][][]*/
 	public double [][][] boxFilter( ) {
-        
+
         /*Mask for Filter */
         int [] mask =	{1, 1, 1, 1, 1, 1, 1, 1, 1};
 		int promedio = 0;
 		for( int x = 0 ; x < 9 ; x++ ){
-			promedio += mask[ x ];	
+			promedio += mask[ x ];
 		}
 		double peso = (double)1/promedio;
-                      
+
         double [][][] L = new double [ this.Height ][ this.Width ][ 3 ];
 
         /* canal color */
@@ -469,15 +474,15 @@ public class SpaceFilters {
 	/*End box Filter*/
 	/*Filtro Promedio pesado input: None, Output: duble[][][]*/
 	public double [][][] weightyFilter( ) {
-        
+
         /*Mask for Filter */
         int [] mask =	{1, 2, 1, 2, 4, 2, 1, 2, 1};
 		int promedio = 0;
 		for( int x = 0 ; x < 9 ; x++ ){
-			promedio += mask[ x ];	
+			promedio += mask[ x ];
 		}
 		double peso = (double)1/promedio;
-                      
+
         double [][][] L = new double [ this.Height ][ this.Width ][ 3 ];
 
         /* canal color */
@@ -533,6 +538,8 @@ public class SpaceFilters {
 
     }
 	/*End box Filter*/
+
+    
     /* Gradient Filter  */
     public double [][][] gradientFilter( ) {
         /* Mask for Gradient */
@@ -601,7 +608,7 @@ public class SpaceFilters {
         /* !!!!! Check if is neccesary to scale the imagen  !!!!*/
         return GX;
     }
-	
+
     /* Direccion Gradiente  */
     public double [][][] gradientDirection( ) {
         /* Mask for Gradient */
@@ -745,7 +752,7 @@ public class SpaceFilters {
 
         /* canal color */
         int R = 0, G = 1, B = 2;
-        
+
         //Obtener la magnitud del gradiente
         magnitudGradiente = gradientFilter();
 
@@ -762,7 +769,7 @@ public class SpaceFilters {
                 mask[ i ][ j ][R] = (double)( magnitudGradiente[i][j][R] * laplaciano[i][j][R] );
                 mask[ i ][ j ][G] = (double)( magnitudGradiente[i][j][G] * laplaciano[i][j][G] );
                 mask[ i ][ j ][B] = (double)( magnitudGradiente[i][j][B] * laplaciano[i][j][B] );
-                
+
             }
         }
 
@@ -808,7 +815,7 @@ public class SpaceFilters {
                         double dist=Math.sqrt((double)((x-x1)*(x-x1)+(y-y1)*(y-y1)));
                         Vec.addElement(dist);
                         //System.out.println(dist);
-                    }      
+                    }
                 }catch( Exception e ) {
 
                 }
@@ -821,9 +828,9 @@ public class SpaceFilters {
                 max_vec=(double)Vec.elementAt(i);
             }
         }
-    
+
         Vector Vec2 =new Vector();
-       
+
         //Normalizar el vector distancia
         for (int i=0; i< Vec.size(); i++){
             Vec2.addElement((double)Vec.elementAt(i)/max_vec);
@@ -832,7 +839,7 @@ public class SpaceFilters {
         //for (int i=0; i<Vec2.size();i++ ) {
         //    System.out.println(i+"\t"+Vec2.elementAt(i));
         //}
-        
+
         return Vec2;
 
      }
@@ -861,7 +868,7 @@ public void otsu( ){
                 }
             }
         }
-  
+
     //1.- Calcular el historial normalizado
     for(int i = 0; i < 256; i++) {
         histogramNormalizado[i][0] = (double) histogram[i][0] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
@@ -875,7 +882,7 @@ public void otsu( ){
     double[] sumG = new double [256];
     double[] sumB = new double [256];
     double[][] pI = new double [256][3];
-   
+
     double pr = 0;
     double pg = 0;
     double pb = 0;
@@ -892,19 +899,19 @@ public void otsu( ){
         pI[i][0] = pr;
         pI[i][1] = pg;
         pI[i][2] = pb;
-    }   
+    }
 
     //3.- Calcular la media acumulada
     double[][] media = new double [256][3];
     double mr,mg,mb;
-   
+
     for (int i = 0; i < 256 ; i++) {
         mr = 0;
         mg = 0;
         mb = 0;
 
         for (int j = 0; j <=i ; j++) {
-            mr = mr * pI[j][0];   
+            mr = mr * pI[j][0];
             mg = mg * pI[j][1];
             mb = mb * pI[j][2];
         }
@@ -949,7 +956,7 @@ public void otsu( ){
 
  //Obtener el maximo
     for (int i = 0; i < 256; i++) {
-       
+
         if(maxr <= sigma2B[i][0])
             maxr = sigma2B[i][0];
 
@@ -968,32 +975,32 @@ public void otsu( ){
 
         }
         if (sigma2B[i][1] == maxg){
-           
+
             kg[numkg] = i;
             numkg ++;
 
         }
         if (sigma2B[i][2] == maxb){
-           
+
             kb[numkb] = i;
             numkb ++;
 
-        }  
+        }
 
     }
  //Verificar si k fue el unico, sino promediar
     int temp = 0;
-   
+
     int k0 = 0; //R
     int k1 = 0; //G
     int k2 = 0; //B
 
 
     if (numkr > 1){
-      //Hay que promediar los krs 
+      //Hay que promediar los krs
       for (int i = 0; i < numkr ; i++) {
-          temp = temp + kr[i]; 
-        } 
+          temp = temp + kr[i];
+        }
         k0 = temp / numkr;
     }
 
@@ -1003,10 +1010,10 @@ public void otsu( ){
     temp = 0;
 
     if (numkg > 1){
-      //Hay que promediar los krs 
+      //Hay que promediar los krs
       for (int i = 0; i < numkg ; i++) {
-          temp = temp + kg[i]; 
-        } 
+          temp = temp + kg[i];
+        }
         k1 = temp / numkg;
     }
 
@@ -1017,10 +1024,10 @@ public void otsu( ){
     temp = 0;
 
     if (numkb > 1){
-      //Hay que promediar los krs 
+      //Hay que promediar los krs
       for (int i = 0; i < numkb ; i++) {
-          temp = temp + kb[i]; 
-        } 
+          temp = temp + kb[i];
+        }
         k2 = temp / numkb;
     }
 
@@ -1057,13 +1064,13 @@ public void otsu( ){
                         gxb = 0;
 
                     color = new Color( (int)(gxr), (int)(gxg), (int)(gxb) );
-                   
+
 
                     this.Image.setRGB( i, j, color.getRGB() );
                 }catch( Exception e ) {
                 }
             }
-        } }          
+        } }
 
     /* Save image as png in te current directory */
     public void saveImage( String name ){
