@@ -167,7 +167,7 @@ public class Textura{
         }
 
         for (int color = 0; color < 3; color ++) {
-            sum[ color ] = 1.0 - 1.0 /( 1.0 - sum[ color ]);
+            sum[ color ] = 1.0 - 1.0 /( 1.0 + sum[ color ]);
         }
 
         return sum;
