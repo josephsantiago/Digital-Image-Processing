@@ -126,7 +126,7 @@ public class Textura{
                 }
             }
         }
-        int sumatoria=0;
+        double sumatoria=0;
 
         for( int i = 0 ; i < 256 ; i++ ){
           //  System.out.print("NI: "+ i +"\t"+ "NP: "+ histogram[i]+"\t");
