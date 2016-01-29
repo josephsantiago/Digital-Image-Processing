@@ -134,6 +134,94 @@ public class RegionDescriptor {
 
         return sum;
     }
+    
+    //Entropia
+    public double entropia(){
+        Color color;
+        int R,G,B;
+        int[][] histogram = new int[256][3];
+        double[][] p = new double[256][3];
+
+        /* Getting histogram */
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                    color = new Color( this.DefaultImage.getRGB(i,j) );
+                    R = color.getRed();
+                    G = color.getGreen();
+                    B = color.getBlue();
+                    histogram[R][0]++;
+                    histogram[G][1]++;
+                    histogram[B][2]++;
+                }catch( Exception e ) {
+                }
+            }
+        }
+        double sumatoria=0;
+
+        //1.- Calcular el historial normalizado
+		for(int i = 0; i < 256; i++) {
+		    p[i][0] = (double) histogram[i][0] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+		    p[i][1] = (double) histogram[i][1] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+		    p[i][2] = (double) histogram[i][2] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+		}
+        for( int i = 0 ; i < 256 ; i++ ) {
+        	
+            double Tem1= p[i][0]*( Math.log( p[i][0])/Math.log(2));
+            double Tem2= p[i][1]*( Math.log( p[i][1])/Math.log(2));
+            double Tem3= p[i][2]*( Math.log( p[i][2])/Math.log(2));
+            sumatoria+=(Tem1 + Tem2 + Tem3 );
+            System.out.println( sumatoria );
+        }
+
+        return sumatoria;
+
+    }
+    
+    //Asimetria
+    public double asimetria(){
+    	double mean = mean();
+       Color color;
+        int R,G,B;
+        int[][] histogram = new int[256][3];
+        double[][] p = new double[256][3];
+
+        /* Getting histogram */
+        for( int i = 0; i < this.DefaultImage.getHeight(); i++ ) {
+            for( int j = 0; j < this.DefaultImage.getWidth(); j++ ) {
+                try{
+                    color = new Color( this.DefaultImage.getRGB(i,j) );
+                    R = color.getRed();
+                    G = color.getGreen();
+                    B = color.getBlue();
+                    histogram[R][0]++;
+                    histogram[G][1]++;
+                    histogram[B][2]++;
+                }catch( Exception e ) {
+                }
+            }
+        }
+        double sumatoria=0;
+
+        //1.- Calcular el historial normalizado
+		for(int i = 0; i < 256; i++) {
+		    p[i][0] = (double) histogram[i][0] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+		    p[i][1] = (double) histogram[i][1] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+		    p[i][2] = (double) histogram[i][2] / (this.DefaultImage.getWidth() * this.DefaultImage.getHeight());
+		}
+        for( int i = 0 ; i < 256 ; i++ ) {
+        	
+            double Tem1= Math.pow( ( i  - mean ), 3) * p[i][0] ;
+            double Tem2= Math.pow( ( i  - mean ), 3) * p[i][1] ;
+            double Tem3= Math.pow( ( i  - mean ), 3) * p[i][2] ;
+            sumatoria+=(Tem1 + Tem2 + Tem3 );
+            System.out.println( sumatoria );
+        }
+
+		sumatoria = sumatoria * (-1);
+        return sumatoria;
+
+    }
 
     /* Return the number of zero Crossings from DRN for each color channel */
     public int zeroCrossings() {
